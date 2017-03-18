@@ -43,7 +43,7 @@ public class ControladorInicio implements Initializable{                        
             e.printStackTrace();
         }
         ControladorElementales controlador = (ControladorElementales) loader.getController();                            //Se instancia el controlador respectivo, se debe hacer un casting para que funcione.
-        escenario.setTitle("");
+        escenario.setTitle("Calculadora de Operaciones Elementales");
         escenario.setScene(new Scene(raiz));
         escenario.show();
 
