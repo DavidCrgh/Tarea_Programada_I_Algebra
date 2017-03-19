@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -75,14 +76,47 @@ public class ControladorElementales implements Initializable{
         historialMatricesLogica = new ArrayList<>();
         configurarMenusFilas();
         configurarMenusColumnas();
+
+        botonResolver.setOnAction(event -> {
+            construirMatrizLogica();
+        });
+    }
+
+    public ArrayList<ArrayList<Fraccion>> construirEsqueletoMatriz(){
+        ArrayList<ArrayList<Fraccion>> esqueleto = new ArrayList<>();
+        for(int i = 0; i < filas; i++){
+            ArrayList<Fraccion> filaActual = new ArrayList<>();
+            esqueleto.add(filaActual);
+        }
+
+        return esqueleto;
+    }
+
+    public Fraccion construirFracciondeVBox(VBox vbox){
+        TextField entradaNumerador = (TextField) vbox.getChildren().get(0);
+        TextField entradaDenominador = (TextField) vbox.getChildren().get(2);
+        return new Fraccion(Integer.parseInt(entradaNumerador.getText()), Integer.parseInt(entradaDenominador.getText()));
+    }
+
+    public void construirMatrizLogica(){
+        matrizActualLogica = construirEsqueletoMatriz();
+        for(int i = 0; i < filas; i++){
+            for(int j = 0; j < columnas; j++){
+                VBox vbox = (VBox) matrizActual.getChildren().get(filas * i + j);
+                matrizActualLogica.get(i).add(construirFracciondeVBox(vbox));
+            }
+        }
     }
 
     public VBox construirEntradaMatriz(){
         VBox contenedorVertical = new VBox();
         contenedorVertical.setAlignment(Pos.CENTER);
         TextField entradaNumerador = new TextField();
+        entradaNumerador.setAlignment(Pos.CENTER);
         Separator separador = new Separator(Orientation.HORIZONTAL);
         TextField entradaDenominador = new TextField();
+        entradaDenominador.setAlignment(Pos.CENTER);
+        entradaDenominador.setText("1");
 
         contenedorVertical.getChildren().addAll(entradaNumerador,separador,entradaDenominador);
         return contenedorVertical;
