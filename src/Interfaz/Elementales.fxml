@@ -4,9 +4,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="741.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interfaz.ControladorElementales">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="787.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interfaz.ControladorElementales">
    <children>
-      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="741.0">
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="787.0">
          <menus>
             <Menu fx:id="menuConfig" mnemonicParsing="false" text="Configuración">
                <items>
@@ -32,13 +32,13 @@
             </Menu>
          </menus>
       </MenuBar>
-      <VBox alignment="TOP_CENTER" layoutX="-1.0" layoutY="20.0" prefHeight="471.0" prefWidth="741.0">
+      <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="27.0" prefHeight="471.0" prefWidth="787.0">
          <children>
-            <HBox alignment="CENTER" layoutX="114.0" layoutY="103.0" prefHeight="415.0" prefWidth="741.0" spacing="80.0">
+            <HBox alignment="CENTER" layoutX="114.0" layoutY="103.0" prefHeight="415.0" prefWidth="741.0" spacing="60.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="413.0" prefWidth="300.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="406.0" prefWidth="256.0">
+                        <VBox alignment="CENTER" prefHeight="413.0" prefWidth="257.0">
                            <children>
                               <GridPane fx:id="matrizActual" alignment="CENTER" hgap="10.0" prefHeight="309.0" prefWidth="264.0" vgap="10.0">
                                 <columnConstraints>
@@ -61,18 +61,18 @@
                      </children>
                   </HBox>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="413.0" prefWidth="300.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="271.0" prefWidth="200.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="413.0" prefWidth="300.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="105.0" prefWidth="200.0" spacing="10.0">
+                              <HBox alignment="CENTER" prefHeight="0.0" prefWidth="300.0" spacing="10.0">
                                  <children>
                                     <Button fx:id="botonAnterior" mnemonicParsing="false" text="&lt;" />
                                     <Label fx:id="indicador" text="0" />
                                     <Button fx:id="botonSiguiente" alignment="TOP_LEFT" mnemonicParsing="false" text="&gt;" />
                                  </children>
                               </HBox>
-                              <GridPane fx:id="matrizHistorica" alignment="CENTER" hgap="10.0" prefHeight="330.0" prefWidth="200.0" vgap="10.0">
+                              <GridPane fx:id="matrizHistorica" alignment="CENTER" hgap="10.0" prefHeight="330.0" prefWidth="300.0" vgap="10.0">
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -95,9 +95,9 @@
                </children>
             </HBox>
             <Separator prefWidth="200.0" />
-            <HBox alignment="CENTER" layoutX="271.0" layoutY="237.0" prefHeight="58.0" prefWidth="741.0" spacing="10.0">
+            <HBox alignment="CENTER" layoutX="271.0" layoutY="237.0" prefHeight="86.0" prefWidth="787.0" spacing="10.0">
                <children>
-                  <Button fx:id="definirTam" mnemonicParsing="false" text="Definir tamaño" />
+                  <Button fx:id="definirMatriz" mnemonicParsing="false" text="Definir Matriz" />
                   <Button fx:id="nuevaMatriz" mnemonicParsing="false" text="Nueva matriz" />
                   <ComboBox fx:id="seleccionadorFila1" prefHeight="25.0" prefWidth="80.0" promptText="Fila 1" />
                   <ComboBox fx:id="seleccionadorOperacion" prefHeight="25.0" prefWidth="104.0" promptText="Operación" />

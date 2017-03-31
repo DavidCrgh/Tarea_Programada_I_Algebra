@@ -70,7 +70,7 @@ public class ControladorElementales implements Initializable{
     @FXML
     public Button nuevaMatriz;
     @FXML
-    public Button definirTam;
+    public Button definirMatriz;
 
     public CalculadoraElementales calculadoraElementales;
 
@@ -100,7 +100,7 @@ public class ControladorElementales implements Initializable{
                 "Sumar dos filas"
         );
         botonResolver.setOnAction(event -> aplicarOperacion());
-        definirTam.setOnAction(event -> definirTamano());
+        definirMatriz.setOnAction(event -> definirTamano());
         nuevaMatriz.setOnAction(event -> nuevaMatriz());
         botonSiguiente.setOnAction(event -> mostrarSiguiente());
         botonAnterior.setOnAction(event -> mostrarAnterior());
@@ -318,7 +318,7 @@ public class ControladorElementales implements Initializable{
     public void definirTamano(){
         construirMatrizLogica();
         historialMatricesLogica.add(copiarMatriz(matrizActualLogica));
-        definirTam.setDisable(true);
+        definirMatriz.setDisable(true);
         botonResolver.setDisable(false);
         construirMatrizHistorica(matrizActualLogica);
     }
@@ -338,7 +338,7 @@ public class ControladorElementales implements Initializable{
             historialMatricesLogica = new ArrayList<>();
             operacionesAplicadas = new ArrayList<>();
             construirMatriz();
-            definirTam.setDisable(false);
+            definirMatriz.setDisable(false);
             matrizHistorica.getChildren().clear();
             indicador.setText("0");
         }

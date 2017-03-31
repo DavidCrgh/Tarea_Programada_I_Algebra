@@ -69,11 +69,15 @@ public class Fraccion {
         return simplificar(new Fraccion(numeradorResultado, denominadorResultado));
     }
     public static Fraccion simplificar(Fraccion fraccion){
-        long divisorComun = encontrarDivisorComun(fraccion.numerador, fraccion.denominador);
-        long numeradorResultado = fraccion.numerador / divisorComun;
-        long denominadorResultado = fraccion.denominador / divisorComun;
+        if(fraccion.numerador == 0){
+            return new Fraccion(0,1);
+        } else{
+            long divisorComun = encontrarDivisorComun(fraccion.numerador, fraccion.denominador);
+            long numeradorResultado = fraccion.numerador / divisorComun;
+            long denominadorResultado = fraccion.denominador / divisorComun;
 
-        return new Fraccion(numeradorResultado, denominadorResultado);
+            return new Fraccion(numeradorResultado, denominadorResultado);
+        }
     }
 
     //Auxiliares
@@ -95,16 +99,20 @@ public class Fraccion {
 
     //Encuentra el maximo divisor comun entre dos numeros, se usa para simplificar fracciones.
     private static long encontrarDivisorComun(long numero1, long numero2){
-        int divisor = 2;
-        long minimo = numero1;
-        if (numero1 > numero2)
-            minimo = numero2;
-        while (!(divisor > minimo)){
-            if (numero1 % divisor == 0 && numero2 % divisor == 0)
-                return divisor * encontrarDivisorComun(numero1/divisor, numero2/divisor);
-            divisor++;
+        if (numero1 == numero2) {
+            return numero1;
+        } else {
+            long divisor = 2;
+            long minimo = numero1;
+            if (numero1 > numero2)
+                minimo = numero2;
+            while (!(divisor > minimo)){
+                if (numero1 % divisor == 0 && numero2 % divisor == 0)
+                    return divisor * encontrarDivisorComun(numero1/divisor, numero2/divisor);
+                divisor++;
+            }
+            return 1;
         }
-        return 1;
     }
 }
 
