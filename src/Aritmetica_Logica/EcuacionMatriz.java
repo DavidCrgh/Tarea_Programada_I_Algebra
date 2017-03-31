@@ -1,6 +1,8 @@
 package Aritmetica_Logica;
 
 
+import java.util.ArrayList;
+
 import static Aritmetica_Logica.Fraccion.multiplicar;
 
 /**
@@ -136,6 +138,28 @@ public class EcuacionMatriz {
                 suma = Fraccion.restar(suma, multiplicar(matriz[i][0] , determinante(nm)));
         }
         return suma;
+    }
+
+    public static  Fraccion[][] pasarArray(ArrayList<ArrayList<Fraccion>> array){
+        Fraccion[][] matrizCB = new Fraccion[array.size()][array.size()] ;
+        for (int i = 0; i<array.size();i++){
+            for (int j = 0; j<array.get(i).size();j++){
+                matrizCB[i][j] = array.get(i).get(j);
+            }
+        }
+        return matrizCB;
+    }
+
+    public static  ArrayList<ArrayList<Fraccion>> pasarVector(Fraccion[][] matrizCB){
+        ArrayList<ArrayList<Fraccion>> array = new ArrayList<>() ;
+        for (int i = 0; i<matrizCB.length;i++){
+            ArrayList<Fraccion> filaActual = new ArrayList<>();
+            for (int j = 0; j<matrizCB.length;j++){
+                 filaActual.add(matrizCB[i][j]);
+            }
+            array.add(filaActual);
+        }
+        return array;
     }
 
 }

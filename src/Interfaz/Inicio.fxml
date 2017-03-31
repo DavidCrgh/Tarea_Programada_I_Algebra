@@ -19,7 +19,7 @@
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button fx:id="ecuacionesMatriciales" layoutX="26.0" layoutY="202.0" mnemonicParsing="false" prefHeight="156.0" prefWidth="410.0" text="Ecuaciones Matriciales">
+            <Button fx:id="botonEcuacionesMatriciales" layoutX="26.0" layoutY="202.0" mnemonicParsing="false" prefHeight="156.0" prefWidth="410.0" text="Ecuaciones Matriciales">
                <font>
                   <Font size="24.0" />
                </font>

@@ -21,7 +21,7 @@ public class ControladorInicio implements Initializable{                        
     @FXML
     public Button botonOpsElementales;
     @FXML
-    public Button ecuacionesMatriciales;
+    public Button botonEcuacionesMatriciales;
 
     //Otras variables
 
@@ -29,6 +29,10 @@ public class ControladorInicio implements Initializable{                        
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
        botonOpsElementales.setOnAction(event -> {
            abrirVentanaElementales();
+       });
+
+       botonEcuacionesMatriciales.setOnAction(event -> {
+           abrirVentanaEcuaciones();
        });
     }
 
@@ -48,6 +52,24 @@ public class ControladorInicio implements Initializable{                        
         escenario.show();
 
         Stage temporal = (Stage) botonOpsElementales.getScene().getWindow();                                             //Se obtiene el stage al que pertenece el boton que abre la nueva ventana para poder cerrarla
+        temporal.close();
+    }
+
+    public void abrirVentanaEcuaciones(){
+        Stage escenario = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        Parent raiz = null;
+        try {
+            raiz = loader.load(getClass().getResource("Ecuaciones.fxml").openStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //ControladorElementales controlador = (ControladorElementales) loader.getController();
+        escenario.setTitle("Calculadora de Operaciones Elementales");
+        escenario.setScene(new Scene(raiz));
+        escenario.show();
+
+        Stage temporal = (Stage) botonOpsElementales.getScene().getWindow();
         temporal.close();
     }
 }
