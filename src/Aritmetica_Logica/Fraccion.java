@@ -12,7 +12,14 @@ public class Fraccion {
         numerador = _numerador;
         denominador = _denominador;
     }
-
+    public Fraccion(int _numerador){
+        numerador = _numerador;
+        denominador = 1;
+    }
+    public Fraccion(){
+        this.numerador = 0;
+        this.denominador = 1;
+    }
     //Operaciones basicas
     public static Fraccion sumar(Fraccion operando1, Fraccion operando2){
         int numeradorResultado;
@@ -21,7 +28,7 @@ public class Fraccion {
         numeradorResultado = (operando1.numerador * (denominadorResultado/operando2.denominador)) +
                 (operando2.numerador * (denominadorResultado / operando2.denominador));
 
-        return new Fraccion(numeradorResultado,denominadorResultado);
+        return simplificar(new Fraccion(numeradorResultado,denominadorResultado));
     }
 
     public static Fraccion restar(Fraccion operando1, Fraccion operando2){
@@ -31,23 +38,36 @@ public class Fraccion {
         numeradorResultado = (operando1.numerador * (denominadorResultado/operando2.denominador)) -
                 (operando2.numerador * (denominadorResultado / operando2.denominador));
 
-        return new Fraccion(numeradorResultado,denominadorResultado);
+        return simplificar(new Fraccion(numeradorResultado,denominadorResultado));
     }
 
     public static Fraccion multiplicar(Fraccion operando1, Fraccion operando2){
         int numeradorResultado = operando1.numerador * operando2.numerador;
         int denominadorResultado = operando1.denominador * operando2.denominador;
 
-        return new Fraccion(numeradorResultado,denominadorResultado);
+        return simplificar(new Fraccion(numeradorResultado,denominadorResultado));
     }
+
+    public static Fraccion multiplicar(Fraccion operando1, int operando2){
+        int numeradorResultado = operando1.numerador * operando2;
+        int denominadorResultado = operando1.denominador * 1;
+
+        return simplificar(new Fraccion(numeradorResultado,denominadorResultado));
+    }
+
 
     public static Fraccion dividir(Fraccion operando1, Fraccion operando2){
         int numeradorResultado = operando1.numerador * operando2.denominador;
         int denominadorResultado = operando1.denominador * operando2.numerador;
 
-        return new Fraccion(numeradorResultado, denominadorResultado);
+        return simplificar(new Fraccion(numeradorResultado, denominadorResultado));
     }
+    public static Fraccion dividir(int operando1, Fraccion operando2){
+        int numeradorResultado = operando1 * operando2.denominador;
+        int denominadorResultado = 1 * operando2.numerador;
 
+        return simplificar(new Fraccion(numeradorResultado, denominadorResultado));
+    }
     public static Fraccion simplificar(Fraccion fraccion){
         int divisorComun = encontrarDivisorComun(fraccion.numerador, fraccion.denominador);
         int numeradorResultado = fraccion.numerador / divisorComun;
@@ -65,6 +85,14 @@ public class Fraccion {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Fraccion{" +
+                "numerador=" + numerador +
+                ", denominador=" + denominador +
+                '}';
+    }
+
     //Encuentra el maximo divisor comun entre dos numeros, se usa para simplificar fracciones.
     private static int encontrarDivisorComun(int numero1, int numero2){
         int divisor = 2;
@@ -79,3 +107,4 @@ public class Fraccion {
         return 1;
     }
 }
+

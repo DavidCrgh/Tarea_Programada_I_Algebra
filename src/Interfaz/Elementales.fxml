@@ -8,9 +8,9 @@
    <children>
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="741.0">
          <menus>
-            <Menu mnemonicParsing="false" text="Configuración">
+            <Menu fx:id="menuConfig" mnemonicParsing="false" text="Configuración">
                <items>
-                  <Menu mnemonicParsing="false" text="Filas">
+                  <Menu fx:id="menuFilas" mnemonicParsing="false" text="Filas">
                     <items>
                       <MenuItem fx:id="filas1" mnemonicParsing="false" text="1" />
                         <MenuItem fx:id="filas2" mnemonicParsing="false" text="2" />
@@ -19,7 +19,7 @@
                         <MenuItem fx:id="filas5" mnemonicParsing="false" text="5" />
                     </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Columnas">
+                  <Menu fx:id="menuColumnas" mnemonicParsing="false" text="Columnas">
                     <items>
                         <MenuItem fx:id="columnas1" mnemonicParsing="false" text="1" />
                         <MenuItem fx:id="columnas2" mnemonicParsing="false" text="2" />
@@ -28,7 +28,6 @@
                         <MenuItem fx:id="columnas5" mnemonicParsing="false" text="5" />
                     </items>
                   </Menu>
-                  <MenuItem fx:id="reset" mnemonicParsing="false" text="Reset" />
                </items>
             </Menu>
          </menus>
@@ -64,16 +63,16 @@
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="406.0" prefWidth="496.0">
+                        <VBox alignment="CENTER" prefHeight="271.0" prefWidth="200.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="246.0" spacing="10.0">
+                              <HBox alignment="CENTER" prefHeight="105.0" prefWidth="200.0" spacing="10.0">
                                  <children>
                                     <Button fx:id="botonAnterior" mnemonicParsing="false" text="&lt;" />
                                     <Label fx:id="indicador" text="0" />
-                                    <Button fx:id="botonSiguiente" mnemonicParsing="false" text="&gt;" />
+                                    <Button fx:id="botonSiguiente" alignment="TOP_LEFT" mnemonicParsing="false" text="&gt;" />
                                  </children>
                               </HBox>
-                              <GridPane fx:id="matrizHistorica" alignment="CENTER" hgap="10.0" prefHeight="392.0" prefWidth="277.0" vgap="10.0">
+                              <GridPane fx:id="matrizHistorica" alignment="CENTER" hgap="10.0" prefHeight="330.0" prefWidth="200.0" vgap="10.0">
                                 <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -98,10 +97,14 @@
             <Separator prefWidth="200.0" />
             <HBox alignment="CENTER" layoutX="271.0" layoutY="237.0" prefHeight="58.0" prefWidth="741.0" spacing="10.0">
                <children>
-                  <ComboBox fx:id="seleccionadorFila1" prefWidth="150.0" promptText="Fila 1" />
-                  <ComboBox fx:id="seleccionadorOperacion" prefWidth="150.0" promptText="Operación" />
-                  <TextField fx:id="entradaEscalar" promptText="Escalar" />
-                  <ComboBox fx:id="seleccionadorFila2" prefWidth="150.0" promptText="Fila 2" />
+                  <Button fx:id="definirTam" mnemonicParsing="false" text="Definir tamaño" />
+                  <Button fx:id="nuevaMatriz" mnemonicParsing="false" text="Nueva matriz" />
+                  <ComboBox fx:id="seleccionadorFila1" prefHeight="25.0" prefWidth="80.0" promptText="Fila 1" />
+                  <ComboBox fx:id="seleccionadorOperacion" prefHeight="25.0" prefWidth="104.0" promptText="Operación" />
+                  <TextField fx:id="entradaNumerador" prefHeight="25.0" prefWidth="45.0" promptText="Num" />
+                  <Label text="/" />
+                  <TextField fx:id="entradaDenominador" prefHeight="25.0" prefWidth="39.0" promptText="Demoninador" text="1" />
+                  <ComboBox fx:id="seleccionadorFila2" prefHeight="25.0" prefWidth="76.0" promptText="Fila 2" />
                   <Button fx:id="botonResolver" mnemonicParsing="false" text="Resolver" />
                </children>
             </HBox>

@@ -1,5 +1,7 @@
 package Aritmetica_Logica;
 
+import javafx.scene.layout.GridPane;
+
 import java.util.ArrayList;
 
 /**
@@ -18,7 +20,7 @@ public class CalculadoraElementales {
              if (i == fila) {
                  for(int j = 0; j < matriz.get(i).size(); j++){
                      Fraccion resultado = Fraccion.multiplicar(matriz.get(i).get(j),escalar);
-                     matriz.get(i).set(i, resultado);
+                     matriz.get(i).set(j, resultado);
                  }
              }
          }
