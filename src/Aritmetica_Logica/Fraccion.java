@@ -16,10 +16,7 @@ public class Fraccion {
         numerador = _numerador;
         denominador = 1;
     }
-    public Fraccion(){
-        this.numerador = 0;
-        this.denominador = 1;
-    }
+
     //Operaciones basicas
     public static Fraccion sumar(Fraccion operando1, Fraccion operando2){
         long numeradorResultado;
@@ -64,27 +61,6 @@ public class Fraccion {
         return simplificar(new Fraccion(numeradorResultado,denominadorResultado));
     }
 
-    public static Fraccion multiplicar(Fraccion operando1, int operando2){
-        long numeradorResultado = operando1.numerador * operando2;
-        long denominadorResultado = operando1.denominador * 1;
-
-        return simplificar(new Fraccion(numeradorResultado,denominadorResultado));
-    }
-
-
-    public static Fraccion dividir(Fraccion operando1, Fraccion operando2){
-        long numeradorResultado = operando1.numerador * operando2.denominador;
-        long denominadorResultado = operando1.denominador * operando2.numerador;
-        return simplificar(new Fraccion(numeradorResultado, denominadorResultado));
-    }
-
-    public static Fraccion dividir(int operando1, Fraccion operando2){
-        long numeradorResultado = operando1 * operando2.denominador;
-        long denominadorResultado = 1 * operando2.numerador;
-
-        return simplificar(new Fraccion(numeradorResultado, denominadorResultado));
-    }
-
     public static Fraccion simplificar(Fraccion fraccion){
         if (fraccion.numerador == 0) {
             return new Fraccion(0,1);
@@ -103,14 +79,6 @@ public class Fraccion {
     }
 
     //Auxiliares
-    private static long econtrarDenominadorComun(long denominador1, long denominador2){
-        if(denominador1 == denominador2){
-            return denominador1;
-        } else {
-            return denominador1 * denominador2;
-        }
-    }
-
     @Override
     public String toString() {
         return "" + numerador + "/" + denominador;

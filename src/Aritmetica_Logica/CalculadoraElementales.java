@@ -1,7 +1,5 @@
 package Aritmetica_Logica;
 
-import javafx.scene.layout.GridPane;
-
 import java.util.ArrayList;
 
 /**

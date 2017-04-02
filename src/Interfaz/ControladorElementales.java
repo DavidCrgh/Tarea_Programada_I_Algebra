@@ -8,10 +8,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -52,7 +48,11 @@ public class ControladorElementales implements Initializable{
     @FXML
     public Label indicador;
     @FXML
+    public Label ultimaOperacion;
+    @FXML
     public Button botonSiguiente;
+    @FXML
+    public MenuBar menuConfiguracion;
     @FXML
     public MenuItem filas1;
     @FXML
@@ -175,7 +175,7 @@ public class ControladorElementales implements Initializable{
     }
 
     public VBox construirEntradaMatrizActual(ArrayList<ArrayList<Fraccion>> matrizActualLogica,int fila, int columna){
-        Fraccion fraccion = matrizActualLogica.get(fila).get(columna);;
+        Fraccion fraccion = matrizActualLogica.get(fila).get(columna);
         VBox contenedorVertical = new VBox();
         contenedorVertical.setAlignment(Pos.CENTER);
         TextField entradaNumerador = new TextField();
@@ -204,10 +204,12 @@ public class ControladorElementales implements Initializable{
         VBox contenedorVertical = new VBox();
         contenedorVertical.setAlignment(Pos.CENTER);
         TextField entradaNumerador = new TextField();
+        entradaNumerador.setEditable(false);
         entradaNumerador.setAlignment(Pos.CENTER);
         entradaNumerador.setText(String.valueOf(fraccion.numerador));
         Separator separador = new Separator(Orientation.HORIZONTAL);
         TextField entradaDenominador = new TextField();
+        entradaDenominador.setEditable(false);
         entradaDenominador.setAlignment(Pos.CENTER);
         entradaDenominador.setText(String.valueOf(fraccion.denominador));
 
@@ -292,7 +294,7 @@ public class ControladorElementales implements Initializable{
                 int numerador = Integer.parseInt(entradaNumerador.getText());
                 int denominador = Integer.parseInt(entradaDenominador.getText());
                 Fraccion escalar = new Fraccion(numerador,denominador);
-                operacionesAplicadas.add(sel);
+                operacionesAplicadas.add(armarStringOperaciones(fila,sel,escalar,-1));
                 calculadoraElementales.multiplicarFila(matrizActualLogica,fila-1,escalar);
                 historialMatricesLogica.add(copiarMatriz(matrizActualLogica));
                 construirMatrizActual(matrizActualLogica);
@@ -308,7 +310,7 @@ public class ControladorElementales implements Initializable{
                 JOptionPane.showMessageDialog(mensaje, "El número de fila excede el límite, por favor ingreselo nuevamente");
                 return;
             }
-            operacionesAplicadas.add(sel);
+            operacionesAplicadas.add(armarStringOperaciones(fila,sel,null,fila2));
             calculadoraElementales.intercambiarFilas(matrizActualLogica,fila-1,fila2-1);
             historialMatricesLogica.add(copiarMatriz(matrizActualLogica));
             construirMatrizActual(matrizActualLogica);
@@ -323,7 +325,7 @@ public class ControladorElementales implements Initializable{
                 int numerador = Integer.parseInt(entradaNumerador.getText());
                 int denominador = Integer.parseInt(entradaDenominador.getText());
                 Fraccion escalar = new Fraccion(numerador,denominador);
-                operacionesAplicadas.add(sel);
+                operacionesAplicadas.add(armarStringOperaciones(fila,sel,escalar,fila2));
                 calculadoraElementales.sumarFilas(matrizActualLogica,fila-1,fila2-1,escalar);
                 historialMatricesLogica.add(copiarMatriz(matrizActualLogica));
                 construirMatrizActual(matrizActualLogica);
@@ -335,12 +337,45 @@ public class ControladorElementales implements Initializable{
         //imprimirHistorial ();
     }
 
+    public String armarStringOperaciones(int fila1, String operacion, Fraccion escalar, int fila2){
+        String resultado = "";
+        switch (operacion){
+            case "Multiplicar fila por escalar":
+                resultado += escalar.numerador + "/" + escalar.denominador + " f" + fila1;
+                break;
+            case "Intercambiar filas":
+                resultado += "f" + fila1 + " <-> " + "f" + fila2;
+                break;
+            case "Sumar dos filas":
+                resultado += "f" + fila1 + " + " + escalar.numerador + "/" + escalar.denominador +" f" + fila2;
+                break;
+        }
+        return resultado;
+    }
+
     public void definirTamano(){
         construirMatrizLogica();
         historialMatricesLogica.add(copiarMatriz(matrizActualLogica));
         definirMatriz.setDisable(true);
         botonResolver.setDisable(false);
         construirMatrizHistorica(matrizActualLogica);
+        ultimaOperacion.setText("Inicial");
+        menuConfiguracion.setDisable(true);
+        switchEntradasMatrizAcutal(false);
+    }
+
+    public void switchEntradasMatrizAcutal(boolean valorEditable){
+        int limite = matrizActual.getChildren().size();
+
+        for(int i = 0; i < limite; i++){
+            VBox entradaActual = (VBox) matrizActual.getChildren().get(i);
+            TextField entradaNumerador = (TextField) entradaActual.getChildren().get(0);
+            TextField entradaDenominador = (TextField) entradaActual.getChildren().get(2);
+            entradaNumerador.setEditable(valorEditable);
+            entradaDenominador.setEditable(valorEditable);
+            entradaActual.getChildren().set(0,entradaNumerador);
+            entradaActual.getChildren().set(2,entradaDenominador);
+        }
     }
 
     public void nuevaMatriz(){
@@ -363,6 +398,8 @@ public class ControladorElementales implements Initializable{
             indicador.setText("0");
             panel.getChildren().remove(parentesisA);
             panel.getChildren().remove(parentesisB);
+            menuConfiguracion.setDisable(false);
+            switchEntradasMatrizAcutal(true);
         }
     }
 
@@ -376,6 +413,7 @@ public class ControladorElementales implements Initializable{
             indicador.setText(String.valueOf(ind));
             ArrayList<ArrayList<Fraccion>> matriz = historialMatricesLogica.get(ind);
             construirMatrizHistorica(matriz);
+            ultimaOperacion.setText(operacionesAplicadas.get(ind-1));
             //imprimirMatriz(historialMatricesLogica.get(ind));
         }
 
@@ -391,6 +429,11 @@ public class ControladorElementales implements Initializable{
             indicador.setText(String.valueOf(ind));
             ArrayList<ArrayList<Fraccion>> matriz = historialMatricesLogica.get(ind);
             construirMatrizHistorica(matriz);
+            if(ind == 0){
+                ultimaOperacion.setText("Inicial");
+            } else {
+                ultimaOperacion.setText(operacionesAplicadas.get(ind - 1));
+            }
             //imprimirMatriz(historialMatricesLogica.get(ind));
         }
     }
@@ -409,32 +452,13 @@ public class ControladorElementales implements Initializable{
         return copiaMatriz;
     }
 
-    private void imprimirHistorial (){
-        System.out.println("-------------------------------------------------------");
-        System.out.println(historialMatricesLogica.size());
-        for ( ArrayList<ArrayList<Fraccion>> matriz : historialMatricesLogica) {
-            imprimirMatriz(matriz);
-            System.out.println();
-        }
-    }
-
-    private void imprimirMatriz (ArrayList<ArrayList<Fraccion>> matriz){
-        for (ArrayList<Fraccion> subFilas : matriz) {
-            for (Fraccion entrada : subFilas) {
-                System.out.print(entrada.toString());
-                System.out.print('\t');
-            }
-            System.out.println();
-        }
-    }
-
     private void setParentesis (int ordenN, int ordenM){
         panel.getChildren().remove(parentesisA);
         panel.getChildren().remove(parentesisB);
         Double[] espacios = {50.0, 30.0, 4.1, 1.5, 3.0};
         Double[] espaciosH= {50.0, 30.0, 11.5, 1.7, 4.8};
         parentesisA = createParenthesis(14.0, 65.0, ordenN, ordenM, espacios);
-        parentesisB = createParenthesis(505.0, 73.0, ordenN, ordenM, espaciosH);
+        parentesisB = createParenthesis(570.0, 73.0, ordenN, ordenM, espaciosH);
         panel.getChildren().add(parentesisA);
         panel.getChildren().add(parentesisB);
     }

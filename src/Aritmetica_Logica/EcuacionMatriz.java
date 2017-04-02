@@ -3,13 +3,13 @@ package Aritmetica_Logica;
 import java.util.ArrayList;
 
 /**
- * Created by Pablo Brenes on 31 mar 2017.
+ * Creado por Pablo Brenes 31/03/17.
  */
 public class EcuacionMatriz {
 
     public static Fraccion[][] solucionarEcuacion(Fraccion[][] A, Fraccion[][] B, Fraccion[][] C){
         int orden = A.length;
-        Fraccion[][] solucion = new Fraccion[orden][orden];
+        Fraccion[][] solucion;
         solucion = restarMatrices(C, B);
         solucion = multiplicarMatrices(inversa(A), solucion);
         return solucion;
@@ -24,7 +24,8 @@ public class EcuacionMatriz {
         for (int i = 1; i < matriz.length; i++){
             control = Math.pow(-1, i+2);
 
-            sum = Fraccion.sumar(sum, Fraccion.multiplicar(new Fraccion(control.longValue(), 1), Fraccion.multiplicar(matriz[0][i], determinante(suprimirFilaColuma(matriz, 1, i+1)))));
+            sum = Fraccion.sumar(sum, Fraccion.multiplicar(new Fraccion(control.longValue(), 1),
+                    Fraccion.multiplicar(matriz[0][i], determinante(suprimirFilaColuma(matriz, 1, i+1)))));
         }
         return sum;
     }
@@ -47,7 +48,8 @@ public class EcuacionMatriz {
             for (int j = 0; j < orden; j++) {
                 matrizResultante [i][j] = Fraccion.multiplicar(factorIzquierdo[i][0], factorDerecho[0][j]);
                 for (int k = 1; k < orden; k++) {
-                    matrizResultante [i][j] = Fraccion.sumar(matrizResultante[i][j], Fraccion.multiplicar(factorIzquierdo[i][k], factorDerecho[k][j]));
+                    matrizResultante [i][j] = Fraccion.sumar(matrizResultante[i][j],
+                            Fraccion.multiplicar(factorIzquierdo[i][k], factorDerecho[k][j]));
                 }
             }
         }
@@ -78,7 +80,8 @@ public class EcuacionMatriz {
         Fraccion[][] matrizAdjunta = crearBaseCofactores(orden);
         for (int i = 0; i < orden; i++) {
             for (int j = 0; j < orden; j++) {
-                matrizAdjunta[i][j] = Fraccion.multiplicar(matrizAdjunta[i][j], determinante(suprimirFilaColuma(matriz, i+1, j+1)));
+                matrizAdjunta[i][j] = Fraccion.multiplicar(matrizAdjunta[i][j],
+                        determinante(suprimirFilaColuma(matriz, i+1, j+1)));
             }
         }
         return matrizAdjunta;
