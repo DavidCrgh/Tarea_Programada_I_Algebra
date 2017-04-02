@@ -1,143 +1,140 @@
 package Aritmetica_Logica;
 
-
 import java.util.ArrayList;
 
-import static Aritmetica_Logica.Fraccion.multiplicar;
-
 /**
- * Created by Toño_PC on 28/3/2017.
+ * Created by Pablo Brenes on 31 mar 2017.
  */
 public class EcuacionMatriz {
-    public static Fraccion[][] ecuacionMatriz(Fraccion[][] A,Fraccion[][] B,Fraccion[][] C){
-        /*
-        * Funcion ecuacionMatriz
-        * Resuelve una ecuacion del tipo AX + B = C
-        * Si no hay B se soluciona con entrar una matriz de ceros
-        * Todas las matrices deben ser del tipo nxn
+
+    public static Fraccion[][] solucionarEcuacion(Fraccion[][] A, Fraccion[][] B, Fraccion[][] C){
+        int orden = A.length;
+        Fraccion[][] solucion = new Fraccion[orden][orden];
+        solucion = restarMatrices(C, B);
+        solucion = multiplicarMatrices(inversa(A), solucion);
+        return solucion;
+    }
+
+    public static Fraccion determinante(Fraccion[][] matriz){
+        if (matriz.length == 1){
+            return matriz[0][0];
+        }
+        Double control;
+        Fraccion sum = Fraccion.multiplicar(matriz[0][0], determinante(suprimirFilaColuma(matriz, 1, 1)));
+        for (int i = 1; i < matriz.length; i++){
+            control = Math.pow(-1, i+2);
+
+            sum = Fraccion.sumar(sum, Fraccion.multiplicar(new Fraccion(control.longValue(), 1), Fraccion.multiplicar(matriz[0][i], determinante(suprimirFilaColuma(matriz, 1, i+1)))));
+        }
+        return sum;
+    }
+
+    public static Fraccion[][] restarMatrices (Fraccion[][] minuendo, Fraccion[][] sustraendo){
+        int orden = minuendo.length;
+        Fraccion[][] matrizResultante = new Fraccion[orden][orden];
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matrizResultante[i][j] = Fraccion.restar(minuendo[i][j], sustraendo[i][j]);
+            }
+        }
+        return matrizResultante;
+    }
+
+    public static Fraccion[][] multiplicarMatrices (Fraccion[][] factorIzquierdo, Fraccion[][] factorDerecho){
+        int orden = factorIzquierdo.length;
+        Fraccion[][] matrizResultante = new Fraccion[orden][orden];
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matrizResultante [i][j] = Fraccion.multiplicar(factorIzquierdo[i][0], factorDerecho[0][j]);
+                for (int k = 1; k < orden; k++) {
+                    matrizResultante [i][j] = Fraccion.sumar(matrizResultante[i][j], Fraccion.multiplicar(factorIzquierdo[i][k], factorDerecho[k][j]));
+                }
+            }
+        }
+        return matrizResultante;
+    }
+
+    public static Fraccion[][] inversa (Fraccion[][] matriz){
+        Fraccion determinante = determinante(matriz);
+        determinante = Fraccion.invertir(determinante);
+        Fraccion[][] matrizInversa = matrizAdjunta(matriz);
+        matrizInversa = trasponer(matrizInversa);
+        matrizInversa = multpilicarPorEscalar(matrizInversa, determinante);
+        return matrizInversa;
+    }
+
+    public static Fraccion[][] multpilicarPorEscalar(Fraccion[][] matriz, Fraccion escalar){
+        int orden = matriz.length;
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matriz[i][j] = Fraccion.multiplicar(matriz[i][j], escalar);
+            }
+        }
+        return matriz;
+    }
+
+    public static Fraccion[][] matrizAdjunta(Fraccion[][] matriz){
+        int orden = matriz.length;
+        Fraccion[][] matrizAdjunta = crearBaseCofactores(orden);
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matrizAdjunta[i][j] = Fraccion.multiplicar(matrizAdjunta[i][j], determinante(suprimirFilaColuma(matriz, i+1, j+1)));
+            }
+        }
+        return matrizAdjunta;
+    }
+
+    public static Fraccion[][] trasponer(Fraccion[][] matriz){
+        int orden = matriz.length;
+        Fraccion[][] matrizTraspuesta = new Fraccion[orden][orden];
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matrizTraspuesta[i][j] = matriz[j][i];
+            }
+        }
+        return matrizTraspuesta;
+    }
+
+    public static Fraccion[][] crearBaseCofactores(int orden){
+        /* Determina donde irá un negativo o un positivo
+           Crea la siguiente matriz         Crea la siguiente matriz
+                en caso 3x3                         en caso 2x2
+            1   -1    1                         1   -1
+           -1    1   -1                        -1    1
+            1   -1    1
         */
-        Fraccion[][] matrizCB = new Fraccion[B.length][B.length] ;
-        for(int i=0;i<B.length;i++){
-            for(int j=0;j<B.length;j++){
-                matrizCB[i][j]=Fraccion.restar(C[i][j],B[i][j]);
-            }
-        }
-        //System.out.println("Matriz Inversa");
-        //System.out.print(Arrays.deepToString(matrizInversa(A)));
-        return multiplicarMatrices(matrizInversa(A), matrizCB);
-    }
-    public static Fraccion[][] multiplicarMatrices(Fraccion[][] A, Fraccion[][] B){
-        Fraccion[][] matRes = new Fraccion[A.length][B.length];
-        for ( int i = 0; i < A.length; i++){
-            for ( int j = 0; j < B.length; j++){
-                for ( int k = 0; k < A.length; k++ ) { //puede ser columnasA o filasB ya que deben ser iguales
-                    if (matRes[i][j] == null) {
-                        matRes[i][j] = multiplicar(A[i][k], B[k][j]);
-                        //System.out.println("\nMultiplicando " + A[i][k] + " * " +  B[k][j]);
-                    }
-                    else{
-                        Fraccion aux = multiplicar(A[i][k], B[k][j]);
-                        // System.out.println("\nMultiplicando " + A[i][k] + " * " +  B[k][j]);
-                        matRes[i][j] = Fraccion.sumar(matRes[i][j], aux);
-                        //System.out.println("\nSumando " + matRes[i][j] + " + " + aux);
-                    }}
-
-            }
-        }
-        return matRes;
-    }
-    public static Fraccion[][] matrizInversa(Fraccion[][] matriz) {
-        Fraccion det= Fraccion.dividir(1,determinante(matriz));
-        if (matriz.length == 2){
-            Fraccion[][] nmatriz1 = new Fraccion[2][2];
-            nmatriz1[0][0] = matriz[1][1];
-            nmatriz1[1][1] = matriz[0][0];
-            nmatriz1[0][1] = multiplicar(matriz[0][1] , -1);
-            nmatriz1[1][0] = multiplicar(matriz[1][0] , -1);
-            return nmatriz1;
-
-        }
-        Fraccion[][] nmatriz= matrizAdjunta(matriz);
-        multiplicarMatriz(det,nmatriz);
-        return nmatriz;
-    }
-
-    public static void multiplicarMatriz(Fraccion n, Fraccion[][] matriz) {
-        for(int i=0;i<matriz.length;i++)
-            for(int j=0;j<matriz.length;j++)
-                matriz[i][j] = multiplicar(matriz[i][j],n);
-    }
-
-
-    public static Fraccion[][] matrizAdjunta(Fraccion [][] matriz){
-        return matrizTranspuesta(matrizCofactores(matriz));
-    }
-
-
-    public static Fraccion[][] matrizCofactores(Fraccion[][] matriz){
-        Fraccion[][] nm=new Fraccion[matriz.length][matriz.length];
-        for(int i=0;i<matriz.length;i++) {
-            for(int j=0;j<matriz.length;j++) {
-                Fraccion[][] det=new Fraccion[matriz.length-1][matriz.length-1];
-                Fraccion detValor;
-                for(int k=0;k<matriz.length;k++) {
-                    if(k!=i) {
-                        for(int l=0;l<matriz.length;l++) {
-                            if(l!=j) {
-                                int indice1=k<i ? k : k-1 ;
-                                int indice2=l<j ? l : l-1 ;
-                                det[indice1][indice2]=matriz[k][l];
-                            }
-                        }
-                    }
+        Fraccion[][] matriz = new Fraccion[orden][orden];
+        for (int i = 0; i < orden; i++){
+            for (int j = 0; j < orden; j++) {
+                if (((i + 1) + (j + 1)) % 2 == 0){
+                    matriz[i][j] = new Fraccion(1);
                 }
-                detValor=determinante(det);
-                nm[i][j]= multiplicar(detValor , (int)Math.pow(-1, i+j+2));
-
-            }
-        }
-        return nm;
-    }
-
-    public static Fraccion[][] matrizTranspuesta(Fraccion[][] matriz){
-        Fraccion[][]nuevam=new Fraccion[matriz[0].length][matriz.length];
-        for(int i=0; i<matriz.length; i++)
-        {
-            for(int j=0; j<matriz.length; j++)
-                nuevam[i][j]=matriz[j][i];
-        }
-        return nuevam;
-    }
-
-    public static Fraccion determinante(Fraccion[][] matriz)
-    {
-        Fraccion det;
-        if(matriz.length==2)
-        {
-            det = Fraccion.restar(multiplicar(matriz[0][0],matriz[1][1]), multiplicar(matriz[1][0],matriz[0][1]));
-            return det;
-        }
-        Fraccion suma= new Fraccion(0,1);
-        for(int i=0; i<matriz.length; i++){
-            Fraccion[][] nm=new Fraccion[matriz.length-1][matriz.length-1];
-            for(int j=0; j<matriz.length; j++){
-                if(j!=i){
-                    for(int k=1; k<matriz.length; k++){
-                        int indice=-1;
-                        if(j<i)
-                            indice=j;
-                        else if(j>i)
-                            indice=j-1;
-                        nm[indice][k-1]=matriz[j][k];
-                    }
+                else{
+                    matriz[i][j] = new Fraccion(-1);
                 }
             }
-            if(i%2==0)
-                suma = Fraccion.sumar(suma, multiplicar(matriz[i][0] , determinante(nm)));
-            else
-                suma = Fraccion.restar(suma, multiplicar(matriz[i][0] , determinante(nm)));
         }
-        return suma;
+        return matriz;
+    }
+
+    public static Fraccion[][] suprimirFilaColuma (Fraccion[][] matriz, int fila, int columna){
+        int ordenMatriz = matriz.length - 1;
+        Fraccion [][] matrizResultante = new Fraccion[ordenMatriz][ordenMatriz];
+        int i2 = 0;
+        int j2 = 0;
+        for (int i = 0; i < ordenMatriz; i++){
+            if (i + 1 == fila)
+                i2++;
+            for (int j = 0; j < ordenMatriz; j++){
+                if (j + 1 == columna)
+                    j2++;
+                matrizResultante[i][j] = matriz[i2][j2];
+                j2++;
+            }
+            i2++;
+            j2 = 0;
+        }
+        return matrizResultante;
     }
 
     public static  Fraccion[][] pasarArray(ArrayList<ArrayList<Fraccion>> array){
@@ -155,11 +152,10 @@ public class EcuacionMatriz {
         for (int i = 0; i<matrizCB.length;i++){
             ArrayList<Fraccion> filaActual = new ArrayList<>();
             for (int j = 0; j<matrizCB.length;j++){
-                 filaActual.add(matrizCB[i][j]);
+                filaActual.add(matrizCB[i][j]);
             }
             array.add(filaActual);
         }
         return array;
     }
-
 }

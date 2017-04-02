@@ -6,13 +6,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeType;
 
 import javax.swing.*;
 import java.net.URL;
@@ -25,6 +29,8 @@ import java.util.ResourceBundle;
  */
 public class ControladorElementales implements Initializable{
     //Controles
+    @FXML
+    public Pane panel;
     @FXML
     public GridPane matrizActual;
     @FXML
@@ -80,8 +86,12 @@ public class ControladorElementales implements Initializable{
     ArrayList<ArrayList<Fraccion>> matrizActualLogica;
     ArrayList<ArrayList<ArrayList<Fraccion>>> historialMatricesLogica;
     ArrayList<String> operacionesAplicadas;
+    Group parentesisA = new Group();
+    Group parentesisB = new Group();
 
     public void initialize(URL fxmlFileLocation, ResourceBundle resources){
+        panel.getChildren().add(parentesisA);
+        panel.getChildren().add(parentesisB);
         filas = 1;
         columnas = 1;
         calculadoraElementales = new CalculadoraElementales();
@@ -126,7 +136,7 @@ public class ControladorElementales implements Initializable{
         matrizActualLogica = construirEsqueletoMatriz();
         for(int i = 0; i < filas; i++){
             for(int j = 0; j < columnas; j++){
-                VBox vbox = (VBox) matrizActual.getChildren().get(filas * i + j);
+                VBox vbox = (VBox) matrizActual.getChildren().get(columnas * i + j);
                 matrizActualLogica.get(i).add(construirFracciondeVBox(vbox));
             }
         }
@@ -209,26 +219,31 @@ public class ControladorElementales implements Initializable{
         filas1.setOnAction(event -> {
             filas = 1;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         filas2.setOnAction(event -> {
             filas = 2;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         filas3.setOnAction(event -> {
             filas = 3;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         filas4.setOnAction(event -> {
             filas = 4;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         filas5.setOnAction(event -> {
             filas = 5;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
     }
 
@@ -236,26 +251,31 @@ public class ControladorElementales implements Initializable{
         columnas1.setOnAction(event -> {
             columnas = 1;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         columnas2.setOnAction(event -> {
             columnas = 2;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         columnas3.setOnAction(event -> {
             columnas = 3;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         columnas4.setOnAction(event -> {
             columnas = 4;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
 
         columnas5.setOnAction(event -> {
             columnas = 5;
             construirMatriz();
+            setParentesis (filas, columnas);
         });
     }
 
@@ -312,7 +332,7 @@ public class ControladorElementales implements Initializable{
                 JOptionPane.showMessageDialog(mensaje, "Los datos ingresados no son válidos");
             }
         }
-        imprimirHistorial ();
+        //imprimirHistorial ();
     }
 
     public void definirTamano(){
@@ -341,6 +361,8 @@ public class ControladorElementales implements Initializable{
             definirMatriz.setDisable(false);
             matrizHistorica.getChildren().clear();
             indicador.setText("0");
+            panel.getChildren().remove(parentesisA);
+            panel.getChildren().remove(parentesisB);
         }
     }
 
@@ -354,7 +376,7 @@ public class ControladorElementales implements Initializable{
             indicador.setText(String.valueOf(ind));
             ArrayList<ArrayList<Fraccion>> matriz = historialMatricesLogica.get(ind);
             construirMatrizHistorica(matriz);
-            imprimirMatriz(historialMatricesLogica.get(ind));
+            //imprimirMatriz(historialMatricesLogica.get(ind));
         }
 
     }
@@ -369,7 +391,7 @@ public class ControladorElementales implements Initializable{
             indicador.setText(String.valueOf(ind));
             ArrayList<ArrayList<Fraccion>> matriz = historialMatricesLogica.get(ind);
             construirMatrizHistorica(matriz);
-            imprimirMatriz(historialMatricesLogica.get(ind));
+            //imprimirMatriz(historialMatricesLogica.get(ind));
         }
     }
     //Metodos que dan funcionalidad a los controles de la ventana
@@ -404,5 +426,89 @@ public class ControladorElementales implements Initializable{
             }
             System.out.println();
         }
+    }
+
+    private void setParentesis (int ordenN, int ordenM){
+        panel.getChildren().remove(parentesisA);
+        panel.getChildren().remove(parentesisB);
+        Double[] espacios = {50.0, 30.0, 4.1, 1.5, 3.0};
+        Double[] espaciosH= {50.0, 30.0, 11.5, 1.7, 4.8};
+        parentesisA = createParenthesis(14.0, 65.0, ordenN, ordenM, espacios);
+        parentesisB = createParenthesis(505.0, 73.0, ordenN, ordenM, espaciosH);
+        panel.getChildren().add(parentesisA);
+        panel.getChildren().add(parentesisB);
+    }
+
+    private Group createParenthesis (Double inicioX, Double inicioY, int filas, int columnas, Double[] espacios){
+
+        /*  X1,Y1.......         *****   *****
+            .          .         *   *   *   * Altura
+            .          . filas   *****   *****
+            .          .         Ancho |      -EspaciadorV (Entre ambos entradas para fraccion)
+            .......X2,Y2               | *****
+              columnas                 |      -EspaciadorVV (Entre lo que representaría un nuevo
+                                  espaciadorH                espacio a la siguiente fila)
+
+        */
+
+        Double anchoCasilla =   espacios[0];
+        Double alturaCasilla =  espacios[1];
+        Double espaciadorH =    espacios[2];
+        Double espaciadorV =    espacios[3];
+        Double espaciadorVV =   espacios[4];
+
+        Double pointX1, pointY1, pointX2, pointY2;
+
+        pointX1 = inicioX;
+        pointY1 = inicioY;
+
+        pointX2 = inicioX + (columnas * (anchoCasilla + espaciadorH)) + espaciadorH;
+        pointY2 = inicioY + (filas * (alturaCasilla * 2 + espaciadorV + espaciadorVV)) + espaciadorVV;
+
+        Line[] line = new Line[6];
+
+        for (int i = 0; i < 6; i++) {
+            line[i] = new Line();
+            line[i].setStrokeType(StrokeType.OUTSIDE);
+            line[i].setStrokeWidth(1.5);
+        }
+
+        //Linea vertical izquierda
+        line[0].setStartX   (pointX1);
+        line[0].setStartY   (pointY1);
+        line[0].setEndX     (pointX1);
+        line[0].setEndY     (pointY2);
+
+        //Linea vertical derecha
+        line[1].setStartX   (pointX2);
+        line[1].setStartY   (pointY1);
+        line[1].setEndX     (pointX2);
+        line[1].setEndY     (pointY2);
+
+        //Linea esquina superior izquierda
+        line[2].setStartX   (pointX1);
+        line[2].setStartY   (pointY1);
+        line[2].setEndX     (pointX1+20.0);
+        line[2].setEndY     (pointY1);
+
+        //Linea esquina inferior izquierda
+        line[3].setStartX   (pointX1);
+        line[3].setStartY   (pointY2);
+        line[3].setEndX     (pointX1+20.0);
+        line[3].setEndY     (pointY2);
+
+        //Linea esquina superior derecha
+        line[4].setStartX   (pointX2-20.0);
+        line[4].setStartY   (pointY1);
+        line[4].setEndX     (pointX2);
+        line[4].setEndY     (pointY1);
+
+        //Linea esquina inferior derecha
+        line[5].setStartX   (pointX2-20.0);
+        line[5].setStartY   (pointY2);
+        line[5].setEndX     (pointX2);
+        line[5].setEndY     (pointY2);
+
+        return new Group(line);
     }
 }

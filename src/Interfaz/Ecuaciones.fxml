@@ -5,8 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1102.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interfaz.ControladorEcuaciones">
+<Pane fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1102.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Interfaz.ControladorEcuaciones">
    <children>
       <VBox layoutX="-3.0" layoutY="32.0" prefHeight="770.0" prefWidth="1102.0">
          <children>
@@ -125,7 +124,7 @@
             <items>
                   <Menu mnemonicParsing="false" text="Orden">
                     <items>
-                      <MenuItem fx:id="orden1" mnemonicParsing="false" text="1" />
+                      <MenuItem fx:id="orden1" mnemonicParsing="false" text="1" visible="false" />
                         <MenuItem fx:id="orden2" mnemonicParsing="false" text="2" />
                         <MenuItem fx:id="orden3" mnemonicParsing="false" text="3" />
                         <MenuItem fx:id="orden4" mnemonicParsing="false" text="4" />
